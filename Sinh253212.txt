@@ -1,0 +1,45 @@
+--[[
+    SINH253212 VIP - ULTIMATE PROTECTED LOADER
+    KEY: 09810j vip premium
+]]
+
+-- 1. Cấu hình Link GitHub của bạn
+local RAW_URL = "https://raw.githubusercontent.com/gui-gui-v3/Sinh253212/refs/heads/main/Sinhvip.lua"
+
+-- 2. Hệ thống giải mã (Máy ảo VM đơn giản)
+local function Decrypt(data, key)
+    local b = 'zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA01234289567+/='
+    local output = ""
+    local data = data:gsub('[^'..b..'=]', '')
+    data:gsub('.', function(x)
+        if (x == '=') then return '' end
+        local r, f = '', (b:find(x) - 1)
+        for i = 6, 1, -1 do r = r .. (f % 2^i - f % 2^(i - 1) > 0 and '1' or '0') end
+        r:gsub('%d%d%d%d%d%d%d%d', function(y)
+            local c = 0
+            for i = 1, 8 do c = c + (y:sub(i, i) == '1' and 2^(8 - i) or 0) end
+            output = output .. string.char(bit32.bxor(c, key:byte((#output % #key) + 1)))
+        end)
+    end)
+    return output
+end
+
+-- 3. Tải và Thực thi
+local success, content = pcall(function() return game:HttpGet(RAW_URL) end)
+
+if success then
+    local encodedStr = content:match('return "(.-)"')
+    if encodedStr then
+        -- Giải mã bằng Key 09810j của bạn
+        local finalCode = Decrypt(encodedStr, "09810j vip premium")
+        local run = loadstring(finalCode)
+        if run then
+            run()
+        else
+            warn("Lỗi giải mã: Key không khớp hoặc dữ liệu hỏng!")
+        end
+    end
+else
+    warn("Lỗi kết nối Server!")
+end
+Như này à
